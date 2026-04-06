@@ -50,7 +50,7 @@ const CAMERAS = [
     res: '2.7K/60',
     ar: '4:3',
     storage: '128GB Pro',
-    power: 'Anker Prime 10K (30W PD)',
+    power: 'UGREEN Nexode 10000mAh (back helmet pouch)',
     nightCam: false,
     card: 'SanDisk Extreme Pro V30',
     lens: 'TBD — test Wide vs Linear in dry run',
@@ -59,7 +59,7 @@ const CAMERAS = [
     isoNight: '1600 / drop to 24fps',
     recordTime: '~3.5 hrs per card',
     notes:
-      'Primary face cam. 4:3 aspect gives vertical crop flexibility for Reels/Shorts. MUST use Anker Prime 10K PD bank — standard USB-A causes "Insufficient Power" error at 2.7K/60. Set Bitrate: High. Coil + zip-tie cable to helmet — snag risk in Alberta woods. Lens mode: confirm Wide vs Linear in dry run side-by-side test.',
+      'Primary face cam. 4:3 aspect gives vertical crop flexibility for Reels/Shorts. UGREEN Nexode 10000mAh mounted in back-of-helmet counterweight pouch — route USB-C cable cleanly to avoid snag risk in Alberta woods. Set Bitrate: High. Lens mode: confirm Wide vs Linear in dry run side-by-side test.',
   },
   {
     id: 'gp8',
@@ -68,7 +68,7 @@ const CAMERAS = [
     res: '2.7K/60',
     ar: '4:3',
     storage: '128GB',
-    power: 'Anker 313 PowerCore 10K',
+    power: 'UGREEN Nexode 10000mAh (back helmet pouch)',
     nightCam: false,
     card: 'SanDisk Extreme',
     lens: 'Wide',
@@ -77,7 +77,7 @@ const CAMERAS = [
     isoNight: '1600 / drop to 24fps',
     recordTime: '~4.0 hrs per card',
     notes:
-      'Callie face cam. 4:3 matches GP10 for multi-cam consistency. Slim Anker 313 fits helmet counterweight pouch. Set Lens: Wide — NOT SuperView. Set Bitrate: High. Check charge night before. Drop to 24fps when light is failing at night.',
+      'Callie face cam. 4:3 matches GP10 for multi-cam consistency. UGREEN Nexode 10000mAh mounted in back-of-helmet counterweight pouch. Set Lens: Wide — NOT SuperView. Set Bitrate: High. Check charge night before. Drop to 24fps when light is failing at night.',
   },
   {
     id: 'gp4',
