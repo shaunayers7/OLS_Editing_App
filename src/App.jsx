@@ -182,16 +182,70 @@ const DEFAULT_PHASES = [
     label: 'Creative Cut',
     subtitle: 'Speed Editor Mode',
     day: [
-      'Source Tape: Use the wheel to scan action hits/tags across the whole day.',
+      'Source Tape: Press SHTL + rotate dial → scans action hits/tags across the whole day like rewinding tape.',
       'Append Cuts: Build rough story by stacking clips onto the timeline.',
       'Source Overwrite: Headcam hit → CAM 2 + wheel → drop in scope-cam shot.',
       'Ignore Gaps: Leave sync gaps on timeline until end of rough cut.',
+      '── Speed Editor Reference ──',
+      'SHTL: Press once + Rotate Dial → Continuous playback, like fast-forward/rewind on a tape deck.',
+      'JOG: Press once + Rotate Dial → Precise frame-by-frame movement; stops when you stop.',
+      'SCRL: Press once + Rotate Dial → High-speed navigation to fly through long timelines.',
+      'TRIM IN / OUT: Hold + Rotate Dial → Shortens or lengthens the start or end of a clip.',
+      'ROLL: Hold + Rotate Dial → Moves a cut point left or right without changing total timeline length.',
+      'SLIDE: Double-Tap ROLL + Rotate → Shuffles a clip\'s position between two other clips.',
+      'SLIP SOURCE: Hold + Rotate Dial → Changes the start of the footage inside the clip.',
+      'SLIP DEST: Hold + Rotate Dial → Changes the end of the footage inside the clip.',
+      'SPLIT / MOVE: Hold + Rotate Dial → Picks up the clip and slides it to a new spot in the timeline.',
+      'TRANSITION: Hold + Rotate Dial → Cycles through fades, wipes, and dissolves.',
+      'TRANS DUR: Hold + Rotate Dial → Makes a transition (e.g. cross-dissolve) longer or shorter.',
+      'AUDIO LEVEL: Hold + Rotate Dial → Instantly raises or lowers volume of the selected clip.',
+      'TITLE Font: Double-Tap Hold + Rotate → Changes the font of a title while you watch it update live.',
+      'MARKER Color: Double-Tap Hold + Rotate → Opens a wheel to pick a specific marker color.',
+      'SNAP Viewer: Double-Tap Hold + Rotate → Resizes the video preview window bigger or smaller.',
+      'CLOSE UP: Hold + Rotate Dial → Moves the zoom up or down to keep a face or object in frame.',
+      '── Modifier & Hidden Keys ──',
+      'SMART IN / APPEND: Double-Tap → Ignores your In/Out points and drops the full clip straight into the timeline.',
+      'IN / OUT (White Keys): Double-Tap → Clears the In or Out mark on your source tape.',
+      'TRANSITION (Lock Default): Double-Tap while setting duration → Locks that duration as the new default for all future dissolves.',
+      'ESCAPE: Double-Tap → Undo (Cmd/Ctrl + Z) — reverses your last mistake.',
+      'MARK: Double-Tap → Opens the Marker Note box so you can type a label for that spot.',
+      'REVIEW (Full View): Double-Tap → Plays your sequence from the very beginning in Full Screen mode.',
+      'LIVE O/WR: Double-Tap → Randomly chooses a different camera angle from your Sync Bin.',
+      'SPLIT (Join Trick): Press once on a through-cut → Joins the two halves of the clip back together.',
+      '⚡ Pro Tip: SMART IN / APPEND (Double-Tap) is perfect for dropping a full timelapse in at once — no need to mark In/Out points.',
     ],
     night: [
       'Source Tape: Scan for tracer fire, light hits, and tags.',
       'Append Cuts: Build rough story; trim dark dead space aggressively.',
       'Source Overwrite: Headcam hit → CAM 2 + wheel → scope or Sionyx shot.',
       'Ignore Gaps: Leave sync gaps until end of rough cut.',
+      '── Speed Editor Reference ──',
+      'SHTL: Press once + Rotate Dial → Continuous playback, like fast-forward/rewind on a tape deck.',
+      'JOG: Press once + Rotate Dial → Precise frame-by-frame movement; stops when you stop.',
+      'SCRL: Press once + Rotate Dial → High-speed navigation to fly through long timelines.',
+      'TRIM IN / OUT: Hold + Rotate Dial → Shortens or lengthens the start or end of a clip.',
+      'ROLL: Hold + Rotate Dial → Moves a cut point left or right without changing total timeline length.',
+      'SLIDE: Double-Tap ROLL + Rotate → Shuffles a clip\'s position between two other clips.',
+      'SLIP SOURCE: Hold + Rotate Dial → Changes the start of the footage inside the clip.',
+      'SLIP DEST: Hold + Rotate Dial → Changes the end of the footage inside the clip.',
+      'SPLIT / MOVE: Hold + Rotate Dial → Picks up the clip and slides it to a new spot in the timeline.',
+      'TRANSITION: Hold + Rotate Dial → Cycles through fades, wipes, and dissolves.',
+      'TRANS DUR: Hold + Rotate Dial → Makes a transition (e.g. cross-dissolve) longer or shorter.',
+      'AUDIO LEVEL: Hold + Rotate Dial → Instantly raises or lowers volume of the selected clip.',
+      'TITLE Font: Double-Tap Hold + Rotate → Changes the font of a title while you watch it update live.',
+      'MARKER Color: Double-Tap Hold + Rotate → Opens a wheel to pick a specific marker color.',
+      'SNAP Viewer: Double-Tap Hold + Rotate → Resizes the video preview window bigger or smaller.',
+      'CLOSE UP: Hold + Rotate Dial → Moves the zoom up or down to keep a face or object in frame.',
+      '── Modifier & Hidden Keys ──',
+      'SMART IN / APPEND: Double-Tap → Ignores your In/Out points and drops the full clip straight into the timeline.',
+      'IN / OUT (White Keys): Double-Tap → Clears the In or Out mark on your source tape.',
+      'TRANSITION (Lock Default): Double-Tap while setting duration → Locks that duration as the new default for all future dissolves.',
+      'ESCAPE: Double-Tap → Undo (Cmd/Ctrl + Z) — reverses your last mistake.',
+      'MARK: Double-Tap → Opens the Marker Note box so you can type a label for that spot.',
+      'REVIEW (Full View): Double-Tap → Plays your sequence from the very beginning in Full Screen mode.',
+      'LIVE O/WR: Double-Tap → Randomly chooses a different camera angle from your Sync Bin.',
+      'SPLIT (Join Trick): Press once on a through-cut → Joins the two halves of the clip back together.',
+      '⚡ Pro Tip: SMART IN / APPEND (Double-Tap) is perfect for dropping a full timelapse in at once — no need to mark In/Out points.',
     ],
   },
   {
@@ -435,16 +489,20 @@ export default function App() {
             </div>
 
             <ul className="checklist">
-              {items.map((item, idx) => (
+              {items.map((item, idx) => {
+                const isDivider = item.text.startsWith('──')
+                return (
                 <li
                   key={item.id}
                   className={[
-                    'cl-item',
-                    item.checked ? 'is-checked' : '',
-                    editMode ? 'is-editing' : '',
+                    isDivider ? 'cl-divider' : 'cl-item',
+                    !isDivider && item.checked ? 'is-checked' : '',
+                    !isDivider && editMode ? 'is-editing' : '',
                   ].filter(Boolean).join(' ')}
                 >
-                  {editMode ? (
+                  {isDivider ? (
+                    <span className="cl-divider-label">{item.text.replace(/^──\s*/, '').replace(/\s*──$/, '')}</span>
+                  ) : editMode ? (
                     <div className="cl-edit-row">
                       <div className="reorder-btns">
                         <button
@@ -493,9 +551,10 @@ export default function App() {
                       <span className="cl-checkmark" aria-hidden="true" />
                       <span className="cl-text">{item.text}</span>
                     </label>
-                  )}
+                  ) /* end isDivider ternary */ }
                 </li>
-              ))}
+                )
+              })}
             </ul>
           </section>
         )
