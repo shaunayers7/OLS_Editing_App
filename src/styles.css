@@ -227,6 +227,13 @@ h1 {
   font-size: 1.25rem;
 }
 
+.phase-subtitle {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
 .phase-count {
   padding: 0.32rem 0.65rem;
   border-radius: 999px;

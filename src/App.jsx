@@ -5,121 +5,121 @@ const STORAGE_KEY = 'ols-airsoft-checklist-v1'
 const PHASES = [
   {
     id: 'field-prep',
-    label: 'Field Prep',
+    label: 'Field Prep & Storage',
+    subtitle: 'Before the iPad',
     items: {
       day: [
-        'Confirm field waiver, call times, and filming permissions',
-        'Charge cameras, action cams, comms, and spare batteries',
-        'Pack ND filters, lens wipes, and anti-fog kit',
-        'Prep bright tape or markers for player identification',
-        'Stage hydration, snacks, and weather cover in the field bag',
+        'Pull Internal Batteries: Use external power banks only (prevents overheating).',
+        'Rode "Always Record": Set both transmitters to internal backup recording.',
+        'Wind Protection: Twist-lock deadcats on Rodes; use foam "windslayers" or tape on GoPros.',
+        'Camera Settings: Lock Day (4K/60) and Dusk (4K/24, ISO 1600) presets.',
+        'SSD Prep: Format your Samsung/SanDisk SSD to APFS (fastest for iPad).',
+        'Folder Drop: Use the ME_FACE, ME_SCOPE, CALLIE, LEADER structure.',
       ],
       night: [
-        'Confirm field waiver, call times, and low-light filming permissions',
-        'Charge cameras, action cams, helmet lights, and spare batteries',
-        'Pack fast lens, lens wipes, anti-fog kit, and rain cover',
-        'Stage IR strobes, chem lights, or reflective markers for IDs',
-        'Pre-brief flashlight discipline and safe movement lanes',
+        'Pull Internal Batteries: Use external power banks only (night sessions run long).',
+        'Rode "Always Record": Set both transmitters to internal backup recording.',
+        'Wind Protection: Twist-lock deadcats on Rodes; use foam "windslayers" or tape on GoPros.',
+        'Camera Settings: Lock Night preset (4K/24, ISO 3200) for all cameras.',
+        'SSD Prep: Format your Samsung/SanDisk SSD to APFS (fastest for iPad).',
+        'Folder Drop: Use the ME_FACE, ME_SCOPE, CALLIE, LEADER structure with a NIGHT tag.',
       ],
     },
   },
   {
     id: 'intake',
-    label: 'Intake',
+    label: 'Technical Intake',
+    subtitle: 'The "Resource Saver" Step',
     items: {
       day: [
-        'Offload all cards before formatting anything',
-        'Create project folder with date, field, and event name',
-        'Rename A-cam, B-cam, and POV footage consistently',
-        'Backup raw footage to a second drive',
-        'Log standout plays, callouts, and interview clips',
+        'Import Media: Bring your structured folders into the Media Pool.',
+        'Assign Angles: In Metadata, tag cameras 1 through 4 (this fixes the sync grid later).',
+        'Generate Proxies: Right-click all clips > Generate Proxies (ProRes 422 LT).',
+        'Timeline Hack: Set Project Settings to 1080p (even if footage is 4K).',
+        'AI Audio Cleanup: Turn on Voice Isolation (50%) and Dialogue Leveler on your Rode tracks.',
       ],
       night: [
-        'Offload all cards and isolate low-light footage by camera',
-        'Create project folder with date, field, and night-op tag',
-        'Rename A-cam, B-cam, POV, and thermal or IR clips consistently',
-        'Backup raw footage and verify dark-scene files copied cleanly',
-        'Log standout tracer moments, light discipline clips, and comms audio',
+        'Import Media: Bring your structured night-op folders into the Media Pool.',
+        'Assign Angles: In Metadata, tag cameras 1 through 4 (this fixes the sync grid later).',
+        'Generate Proxies: Right-click all clips > Generate Proxies (ProRes 422 LT).',
+        'Timeline Hack: Set Project Settings to 1080p (even if footage is 4K).',
+        'AI Audio Cleanup: Turn on Voice Isolation (50%) and Dialogue Leveler on your Rode tracks.',
       ],
     },
   },
   {
     id: 'sync',
-    label: 'Sync',
+    label: 'Master Sync',
+    subtitle: 'Cut Page',
     items: {
       day: [
-        'Sync cameras with scratch audio or slate markers',
-        'Check frame rates before building multicam sequences',
-        'Align external audio for interviews and staging clips',
-        'Build selects timeline for key engagements',
-        'Flag clips with exposure or focus issues early',
+        'Create Multicam: Highlight all video and Rode files > Create Multicam Clip (Sound/Waveform).',
+        'Open in Timeline: Right-click Multicam > Open in Timeline to mute all GoPro mics.',
+        'Sync Check: Confirm the GoPro "Beeps" or gunshots line up with the Rode audio waveforms.',
+        'The "Anchor": Keep the Rode tracks as your constant audio throughout the project.',
       ],
       night: [
-        'Sync cameras with waveform peaks from shots, comms, or slate clicks',
-        'Check frame rates and shutter mismatches in low-light clips',
-        'Align external audio and suppress handling noise where needed',
-        'Build selects timeline around tracer fire and key pushes',
-        'Flag clips with unusable darkness, focus hunting, or sensor noise',
+        'Create Multicam: Highlight all video and Rode files > Create Multicam Clip (Sound/Waveform).',
+        'Open in Timeline: Right-click Multicam > Open in Timeline to mute all GoPro mics.',
+        'Sync Check: Confirm the GoPro beeps or BB impacts line up with the Rode audio waveforms.',
+        'The "Anchor": Keep the Rode tracks as your constant audio throughout the night project.',
       ],
     },
   },
   {
     id: 'cut',
-    label: 'Cut',
+    label: 'Creative Cut',
+    subtitle: 'Speed Editor Mode',
     items: {
       day: [
-        'Shape cold open around the strongest gameplay hook',
-        'Cut dead space between movement, contact, and reactions',
-        'Mix POV and wide shots to preserve field geography',
-        'Add lower thirds or quick labels for squads and objectives',
-        'Review pacing on iPad-sized playback before locking structure',
+        'Source Tape: Use the wheel to find action hits/tags across the whole day.',
+        'Append Cuts: Build your rough story by "stacking" clips onto the timeline.',
+        'Source Overwrite: While watching a headcam hit, use the CAM 2 button + wheel to drop in the scope-cam shot.',
+        'Ignore Gaps: Keep the sync gaps on the timeline until the very end of the rough cut.',
       ],
       night: [
-        'Open with the clearest high-tension night engagement',
-        'Trim dark dead space aggressively to keep momentum',
-        'Alternate POV, tracer shots, and map context for orientation',
-        'Add quick labels for squads, objectives, and lighting context',
-        'Review pacing on small-screen playback to confirm readability',
+        'Source Tape: Use the wheel to find tracer fire, light hits, and tags across the night footage.',
+        'Append Cuts: Build your rough story by stacking clips; trim dark dead space aggressively.',
+        'Source Overwrite: While watching a headcam hit, use the CAM 2 button + wheel to drop in the scope-cam shot.',
+        'Ignore Gaps: Keep the sync gaps on the timeline until the very end of the rough cut.',
       ],
     },
   },
   {
     id: 'ai-polish',
-    label: 'AI Polish',
+    label: 'Hero 4 & AI Polish',
+    subtitle: 'Phased Resource Use',
     items: {
       day: [
-        'Run transcript or caption generation on dialogue-heavy sections',
-        'Use speech cleanup on interviews and comms highlights',
-        'Apply AI-assisted reframing only where action stays centered',
-        'Generate chapter titles or social clip notes from the rough cut',
-        'Review every AI change manually before approval',
+        'Stabilize & Up-Res: Apply SuperScale 2x and Stabilization to only the Hero 4 clips you used.',
+        'Render in Place: Right-click those Hero 4 clips > Render in Place (bakes the AI so RAM doesn\'t recalculate).',
+        'Shared Nodes: In the Color Page, apply one "Grade" to the GoPro 10 track so every clip matches at once.',
+        'AI Magic Mask: (Do this last!) Track a person or object, then Lock the Node.',
       ],
       night: [
-        'Run transcript or caption generation and correct low-light mishears',
-        'Use speech cleanup to recover quiet comms and mask background hiss',
-        'Apply AI-assisted exposure or denoise tools conservatively',
-        'Generate chapter titles or social clip notes around key night pushes',
-        'Review every AI change manually for artifacts and false detail',
+        'Stabilize & Up-Res: Apply SuperScale 2x and Stabilization to Hero 4 clips only; skip excessively noisy low-light clips.',
+        'Render in Place: Right-click those Hero 4 clips > Render in Place to bake the AI.',
+        'Shared Nodes + LUT: In the Color Page, apply one grade with a denoise pass to the GoPro 10 track.',
+        'AI Magic Mask: (Do this last!) Track a person or IR light source, then Lock the Node.',
       ],
     },
   },
   {
     id: 'export',
-    label: 'Export',
+    label: 'Final Export',
+    subtitle: 'The "Pro" Finish',
     items: {
       day: [
-        'Check titles, captions, and sponsor tags for final spelling',
-        'Export master, upload version, and short-form cutdowns',
-        'Watch exported file for color shifts or audio clipping',
-        'Archive project file, graphics, and final assets',
-        'Reset checklist only after backup is confirmed',
+        'Switch to 4K: Go back to Project Settings and flip the timeline from 1080p to 3840 x 2160.',
+        'Smart Cache Check: Ensure the "Render Cache" bar is Blue (wait for it to turn from Red).',
+        'The Render: MP4 · H.265 (Master) · 60,000 Kbps (for 60fps action).',
+        'SSD Export: Export to the 04_EXPORTS folder to keep your RAW files clean.',
       ],
       night: [
-        'Check titles, captions, and brightness notes for final spelling',
-        'Export master, upload version, and vertical cutdowns',
-        'Watch exported file for crushed shadows, banding, or audio clipping',
-        'Archive project file, LUTs, denoise settings, and final assets',
-        'Reset checklist only after backup is confirmed',
+        'Switch to 4K: Flip the timeline from 1080p to 3840 x 2160 in Project Settings.',
+        'Smart Cache Check: Ensure the "Render Cache" bar is Blue (denoise + upscale may take longer).',
+        'The Render: MP4 · H.265 (Master) · 60,000 Kbps (for 24fps night footage).',
+        'SSD Export: Export to the 04_EXPORTS folder to keep your RAW files clean.',
       ],
     },
   },
@@ -234,7 +234,7 @@ export default function App() {
         <p className="eyebrow">Airsoft Video Production</p>
         <h1>OLS Editing Checklist</h1>
         <p className="hero-copy">
-          Track the shoot-to-export workflow on your iPad without losing progress.
+          DaVinci Resolve iPad workflow — from field prep to 4K export. Proxies and 1080p timeline keep the iPad cool; AI up-res waits until the edit is short.
         </p>
 
         <div className="hero-metrics">
@@ -279,8 +279,9 @@ export default function App() {
           <article className="phase-card" key={phase.id}>
             <div className="phase-header">
               <div>
-                <p className="phase-kicker">Phase</p>
+                <p className="phase-kicker">Phase {PHASES.indexOf(phase) + 1}</p>
                 <h2>{phase.label}</h2>
+                {phase.subtitle && <p className="phase-subtitle">{phase.subtitle}</p>}
               </div>
               <span className="phase-count">{phase.items[mode].length} tasks</span>
             </div>
