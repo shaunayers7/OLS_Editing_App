@@ -584,8 +584,237 @@ h1 {
 }
 
 /* ─────────────────────────────────────────────
-   RESPONSIVE — iPad portrait / landscape
+   PHASE HEADER — collapsible button
 ───────────────────────────────────────────── */
+/* Override: .phase-header is now a <button> */
+button.phase-header {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  padding: 1rem 1rem 0.75rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+button.phase-header:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.phase-header-left { flex: 1; min-width: 0; }
+.phase-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+/* Chevron */
+.phase-chevron {
+  flex: 0 0 auto;
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  transform: rotate(90deg);
+  transition: transform 220ms ease, color 150ms;
+  display: inline-block;
+  line-height: 1;
+}
+.phase-chevron.open {
+  transform: rotate(270deg);
+  color: var(--accent);
+}
+
+/* Shot list header — not a button, same visual layout */
+.shot-list-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ─────────────────────────────────────────────
+   VIDEO PROGRESS BOARD
+───────────────────────────────────────────── */
+.progress-board-section { margin-bottom: 0.75rem; }
+
+.progress-board {
+  padding: 0.4rem 0.75rem 0.75rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.pb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0.35rem;
+  border-bottom: 1px solid var(--line);
+}
+.pb-row:last-child { border-bottom: none; }
+
+.pb-label {
+  font-size: 0.86rem;
+  color: var(--text);
+}
+
+.pb-badge {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--line2);
+  border-radius: 999px;
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: border-color 150ms, color 150ms, background 150ms;
+  white-space: nowrap;
+}
+.pb-badge:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.pb-badge.pb-done {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ─────────────────────────────────────────────
+   SHOT LIST — delete button
+───────────────────────────────────────────── */
+.delete-btn {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--line2);
+  border-radius: 0.5rem;
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 120ms, border-color 120ms;
+}
+.delete-btn:hover { color: var(--danger); border-color: var(--danger); }
+
+/* Shot list card footer */
+.card-footer-row {
+  padding: 0.6rem 0.75rem 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ─────────────────────────────────────────────
+   SPEED EDITOR REFERENCE SECTION
+───────────────────────────────────────────── */
+.se-ref-section {
+  margin-bottom: 0.75rem;
+}
+
+.se-ref-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem 0.75rem;
+  background: none;
+  border: none;
+  border-radius: inherit;
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.se-ref-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.se-ref-body {
+  padding: 0 0.85rem 1rem;
+}
+
+.se-group-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.75;
+  margin: 1rem 0 0.45rem;
+}
+
+.se-table {
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  font-size: 0.82rem;
+}
+
+.se-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+}
+.se-row:last-child { border-bottom: none; }
+
+.se-row > span {
+  padding: 0.55rem 0.7rem;
+  border-right: 1px solid var(--line);
+}
+.se-row > span:last-child { border-right: none; }
+
+.se-head {
+  background: rgba(0,0,0,0.25);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.se-btn {
+  font-weight: 700;
+  color: var(--text);
+  word-break: break-word;
+}
+.se-how {
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+.se-what {
+  color: var(--text-muted);
+  line-height: 1.4;
+  font-size: 0.78rem;
+}
+
+/* ─────────────────────────────────────────────
+   CAMERA POPOVER — shared settings block
+───────────────────────────────────────────── */
+.shared-settings-block {
+  margin: 0.85rem 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line2);
+  border-radius: 0.75rem;
+  background: rgba(0,0,0,0.2);
+}
+.shared-settings-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.75;
+  margin-bottom: 0.55rem;
+}
+
 @media (min-width: 768px) {
   .app { padding: 1.5rem 1.25rem 3rem; }
 
