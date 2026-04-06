@@ -49,10 +49,10 @@ const CAMERAS = [
     role: 'Me / Face',
     res: '2.7K/60',
     ar: '4:3',
-    storage: '128GB Pro',
+    storage: '128GB',
     power: 'UGREEN Nexode 10000mAh (back helmet pouch)',
     nightCam: false,
-    card: 'SanDisk Extreme Pro V30',
+    card: 'SanDisk 128GB Extreme Pro V30',
     lens: 'TBD — test Wide vs Linear in dry run',
     bitrate: '100 Mbps (High)',
     isoDay: '800',
@@ -67,17 +67,17 @@ const CAMERAS = [
     role: 'Callie',
     res: '2.7K/60',
     ar: '4:3',
-    storage: '128GB',
+    storage: '2× 128GB',
     power: 'UGREEN Nexode 10000mAh (back helmet pouch)',
     nightCam: false,
-    card: 'SanDisk Extreme',
+    card: '2× SanDisk 128GB Extreme',
     lens: 'Wide',
     bitrate: '60–100 Mbps (High)',
     isoDay: '800',
     isoNight: '1600 / drop to 24fps',
-    recordTime: '~4.0 hrs per card',
+    recordTime: '~4.0 hrs per card (~8.0 hrs total)',
     notes:
-      'Callie face cam. 4:3 matches GP10 for multi-cam consistency. UGREEN Nexode 10000mAh mounted in back-of-helmet counterweight pouch. Set Lens: Wide — NOT SuperView. Set Bitrate: High. Check charge night before. Drop to 24fps when light is failing at night.',
+      'Callie face cam. 4:3 matches GP10 for multi-cam consistency. Running 2× SanDisk 128GB Extreme cards — swap mid-game if needed. UGREEN Nexode 10000mAh mounted in back-of-helmet counterweight pouch. Set Lens: Wide — NOT SuperView. Set Bitrate: High. Check charge night before. Drop to 24fps when light is failing at night.',
   },
   {
     id: 'gp4',
@@ -173,37 +173,45 @@ const CAMERAS = [
     id: 'iphone13',
     name: 'iPhone 13 Pro',
     role: 'Shaun B-Roll',
-    res: '1080p/60',
+    res: '4K/60',
     ar: '16:9',
     storage: 'Internal',
     power: 'Battery',
     nightCam: false,
     card: 'AirDrop or USB-C to SSD',
     lens: 'Wide / Tele',
-    bitrate: 'HEVC',
+    bitrate: 'H.264 (Most Compatible)',
     isoDay: 'Auto',
     isoNight: 'Auto',
     recordTime: 'Battery limited — charge between games',
+    videoFormat: 'Most Compatible (H.264) — Settings > Camera > Formats',
+    autoFps: 'OFF — Settings > Camera > Record Video > Auto FPS',
+    lockWB: 'ON — Settings > Camera > Record Video > Lock White Balance',
+    nightMode: '30fps when dark — save to SHAUN_IPHONE_30fps folder (separate from 60fps day clips)',
     notes:
-      'Shaun B-roll only. Pre-trip, road trip, camp setup, reactions, post-game. Standard mode 60fps. Import via AirDrop or USB-C to SSD immediately — do not rely on iCloud sync.',
+      'Shaun B-roll only. Pre-trip, road trip, camp setup, reactions, post-game. Set to 4K/60fps — gives "room to zoom" when cropping over 2.7K GoPro timeline. Format: Most Compatible (H.264) for smooth M4 playback. Auto FPS: OFF — prevents secret 24fps drop in dark. Lock White Balance: ON — stops color shifting between sun and shade. Night: switch to 30fps and save to _30fps folder. Import via AirDrop or USB-C to SSD immediately.',
   },
   {
     id: 'iphone10',
     name: 'iPhone 10 Pro',
     role: 'Callie B-Roll',
-    res: '1080p/60',
+    res: '4K/60',
     ar: '16:9',
     storage: 'Internal',
     power: 'Battery',
     nightCam: false,
     card: 'AirDrop or USB-C to SSD',
     lens: 'Wide / Tele',
-    bitrate: 'HEVC',
+    bitrate: 'H.264 (Most Compatible)',
     isoDay: 'Auto',
     isoNight: 'Auto',
     recordTime: 'Battery limited — charge between games',
+    videoFormat: 'Most Compatible (H.264) — Settings > Camera > Formats',
+    autoFps: 'OFF — Settings > Camera > Record Video > Auto FPS',
+    lockWB: 'ON — Settings > Camera > Record Video > Lock White Balance',
+    nightMode: '30fps when dark — save to CALLIE_IPHONE_30fps folder (separate from 60fps day clips)',
     notes:
-      'Callie B-roll only. Reactions, her perspective shots, candid moments. Standard mode 60fps. Import via AirDrop or USB-C to SSD immediately — do not rely on iCloud sync.',
+      'Callie B-roll only. Reactions, her perspective shots, candid moments. Set to 4K/60fps — matches GP10 frame rate and allows crop without quality loss. Format: Most Compatible (H.264) for smooth M4 playback. Auto FPS: OFF — prevents secret 24fps drop in dark. Lock White Balance: ON — stops color shifting between sun and shade. Night: switch to 30fps and save to _30fps folder (shutter stays open longer = more light). Import via AirDrop or USB-C to SSD immediately.',
   },
 ]
 
@@ -217,6 +225,8 @@ const DEFAULT_PHASES = [
     subtitle: '4-Month Prep — Before July',
     day: [
       'Create DaVinci project folder structure on SSD: 00_RAW / 01_PROXIES / 02_PROJECT / 03_ASSETS / 04_EXPORTS.',
+      'iPhone Folder Structure: Inside 00_RAW create SHAUN_IPHONE_60fps + SHAUN_IPHONE_30fps and CALLIE_IPHONE_60fps + CALLIE_IPHONE_30fps — 30fps night clips MUST stay separate from 60fps day clips or you will break slow-mo.',
+      'PowerGrades Safety Deposit Box: Create 03_ASSETS/POWERGRADES folder on SSD. After every color look you love, export as .drx file here — permanent backup that survives app crashes and iPad replacements.',
       'Import hit markers into DaVinci Power Bin → HIT_MARKERS. Verify alpha channel (transparency). Test over 2.7K test footage.',
       'Research + collect SFX: BB impact, ricochet, radio static, hit confirmation beep. Sources: Freesound.org, Pixabay SFX.',
       'Select + download music — Intro (×1–2), Action (×2–3), Transition (×1), Outro (×1). NCS + royalty-free only. Instrumental preferred.',
@@ -306,6 +316,7 @@ const DEFAULT_PHASES = [
       'Wind Protection: Twist-lock deadcats on RØDEs.',
       'Cable Management: Coil + zip-tie Anker cables to helmet.',
       'Camera Settings: All active cameras → EV -0.5, WB 5500K Daylight, Sharpness Low/Medium.',
+      'iPhone Night Mode: Switch both iPhones to 30fps (Settings > Camera > Record Video > 1080p HD at 30fps OR 4K at 30fps). Save all night clips to _30fps folder — NEVER mix with 60fps day footage or it will stutter on the timeline.',
       'Night Protocol: 8pm–10pm — all cameras active, assess light. 10pm–1am — pack all GoPros, AS20, GitUp when too dark.',
       'When cameras are packed: RØDE LAVs stay running. Even dark footage can use RØDE over a map graphic.',
       'Drone: Do NOT fly at night — grounded.',
@@ -1231,6 +1242,23 @@ export default function App() {
                   </div>
                 ))}
               </div>
+              {activeCamera.autoFps && (
+                <div className="shared-settings-block">
+                  <p className="shared-settings-title">iPhone Settings — Horizontal Pro Video</p>
+                  {[
+                    ['Format', activeCamera.videoFormat],
+                    ['Record Video', activeCamera.res],
+                    ['Auto FPS', activeCamera.autoFps],
+                    ['Lock White Balance', activeCamera.lockWB],
+                    ['Night Mode', activeCamera.nightMode],
+                  ].map(([label, value]) => (
+                    <div key={label} className="spec-row" style={{ marginBottom: '0.35rem' }}>
+                      <span className="spec-label">{label}</span>
+                      <strong className="spec-value">{value}</strong>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="shared-settings-block">
                 <p className="shared-settings-title">Shared Settings (All Cameras)</p>
                 {SHARED_CAM_SETTINGS.map(([label, value]) => (
