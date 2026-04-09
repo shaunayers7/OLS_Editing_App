@@ -95,7 +95,7 @@ const CAMERAS = [
     isoNight: 'N/A — pack away when dark',
     recordTime: '~4.5 hrs per card',
     notes:
-      '1080p/60 source — requires SuperScale 2x in AI Polish phase. Anker 321 "lipstick" style keeps weight low. Set Lens: Wide (NOT SuperView) to match GP10/GP8. SMALLEST card (64GB) — warn leader to offload early. Day only camera.',
+      '1080p/60 is the MAXIMUM 60fps resolution on the Hero 4 Black — 2.7K and 4K only reach 30fps on this body. Shooting at 1080p/60 and applying SuperScale 2x in DaVinci Resolve AI Polish phase recovers the resolution difference in post. Anker 321 "lipstick" style keeps weight low. Set Lens: Wide (NOT SuperView) to match GP10/GP8. SMALLEST card (64GB) — warn leader to offload early. Day only camera.',
   },
   {
     id: 'gitup',
