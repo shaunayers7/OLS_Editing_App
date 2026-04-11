@@ -673,6 +673,152 @@ const SE_GODMODE = [
 ]
 
 // ─────────────────────────────────────────────
+// Phase → Tab mapping (0=Field Prep, 1=Sync Lab, 2=Studio)
+// ─────────────────────────────────────────────
+const PHASE_TAB = {
+  'pre-production': 0, 'dry-run': 0, 'field-prep': 0, 'intake': 0,
+  'sync': 1, 'cut': 1, 'fairlight': 1,
+  'edit-page': 2, 'ai-polish': 2, 'export': 2,
+}
+
+// ─────────────────────────────────────────────
+// Section 1 — Metadata Prep (Camera Assignment for DaVinci Sync Bin)
+// ─────────────────────────────────────────────
+const METADATA_PREP = [
+  { cam: 1, name: 'GP 10',   role: 'Head / Face', res: '2.7K/60',  ar: '4:3',  badge: 'anchor' },
+  { cam: 2, name: 'AS20',    role: 'Selfie',       res: '1080p/60', ar: '16:9', badge: 'toggle' },
+  { cam: 3, name: 'GitUp F1',role: 'Scope / PiP',  res: '2.7K/60',  ar: '16:9', badge: null   },
+  { cam: 4, name: 'GP 8',    role: 'Callie',       res: '2.7K/60',  ar: '4:3',  badge: null   },
+  { cam: 5, name: 'GP 4',    role: 'Lead',         res: '1080p/60', ar: '4:3',  badge: 'warn'  },
+]
+
+// ─────────────────────────────────────────────
+// Section 2 — Sync & Multicam Workflow Checklist
+// ─────────────────────────────────────────────
+const DEFAULT_SYNC_CHECKLIST = [
+  {
+    id: 'sc-1',
+    title: 'WAVEFORM SYNC',
+    desc: 'Select CAM 1–5 + 2 Rode Mics → Create Sync Bin.',
+    detail: 'Cut Page → select all clips in batch bin → click Sync Bin icon → Sync by Audio. Use GBB rack clack as the waveform spike anchor. Multi-View grid confirms alignment across all angles.',
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'sc-2',
+    title: 'LOCK AUDIO',
+    desc: 'Lock A1 (Lead Audio) before using Speed Editor Live Overwrite.',
+    detail: 'Right-click RØDE LAV1 track header → Lock Track. This prevents Live Overwrite from accidentally replacing your golden audio. A1 stays locked — only the video layer switches on angle changes.',
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'sc-3',
+    title: 'PAINTING PASS',
+    desc: 'Hold CAM [1–5] + Search Dial to overlay angles on master track.',
+    detail: 'Press and hold the camera number key (1–5) on the Speed Editor, then rotate the Search Dial to scrub. Release when you find the best angle. The selected angle overwrites the master track at that section. Dial up = faster forward, Dial down = reverse.',
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'sc-4',
+    title: 'DOUBLE-TAP CHECK',
+    desc: 'Double-tap Live O/WR to preview angle focus / framing before committing.',
+    detail: 'Before committing to an angle switch: LIVE O/WR double-tap previews the next camera angle full-screen. Verify focus and framing are clean before the cut lands on the timeline. This is your quality gate for every angle change.',
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'sc-5',
+    title: 'SEQUENTIAL APPEND',
+    desc: 'Split Squad segments — move A2 (Callie) to Lead Audio before cut.',
+    detail: "For segments where Callie is the primary action: mute A1 (Shaun), unmute A2 (Callie), and set A2 as the dialogue anchor. Split the sequence at the transition point, re-lock the new Lead Audio. Callie's perspective now drives the audio bed for that segment.",
+    checked: false,
+    warn: false,
+  },
+]
+
+// ─────────────────────────────────────────────
+// Section 3 — Audio & AI Lab constants
+// ─────────────────────────────────────────────
+const TRANSCRIPT_KEYWORDS = ['Contact', 'Moving', 'Medic']
+
+// ─────────────────────────────────────────────
+// Section 4 — iPad Performance Protocol
+// ─────────────────────────────────────────────
+const DEFAULT_IPAD_PERF = [  {
+    id: 'ip-1',
+    title: 'RENDER IN PLACE',
+    desc: '⚠ Right-click GP4 SuperScale / AI clips → Render in Place before final edit.',
+    detail: 'CRITICAL: Without this, the M4 recalculates SuperScale 2x every frame during grading — causing thermal throttle and dropped frames. Right-click all AI-processed clips → Render in Place → ProRes 422. Bake before you grade.',
+    checked: false,
+    warn: true,
+  },
+  {
+    id: 'ip-2',
+    title: 'GAP KILLER',
+    desc: '[Split] → [Jog] → [Split] → [Ripple Delete] — remove dead air gaps.',
+    detail: 'Step 1: Park playhead at the START of the gap → press SPLIT. Step 2: JOG + Dial to move playhead precisely to the END of the gap. Step 3: press SPLIT again. Step 4: click the isolated gap clip → RIPPLE DELETE. The timeline closes the hole automatically.',
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'ip-3',
+    title: 'TIMELINE SCALING',
+    desc: 'Duplicate Timeline → rename Part 01 / Part 02 / Part 03 for long edits.',
+    detail: "Right-click timeline tab → Duplicate Timeline. Rename: 'OLS_Event_Part01'. Repeat for Parts 02 + 03. Trim each duplicate to its section using In/Out points. Each part gets its own Deliver queue — avoids single 30-min crash-prone export on M4.",
+    checked: false,
+    warn: false,
+  },
+]
+
+// ─────────────────────────────────────────────
+// Montage Lab — Intro & Highlights
+// ─────────────────────────────────────────────
+const DEFAULT_MONTAGE_LAB = [
+  {
+    id: 'ml-1',
+    title: 'TRACK SELECTION',
+    desc: "Hybrid Phonk or Cyber-Noir Trap — High BPM.",
+    detail: 'Choose a track with strong transient peaks (kick drums, snares) for tight beat detection. Target 120–160 BPM. Import to Power Bin → MUSIC/INTRO before starting. Instrumental tracks avoid copyright and keep dialogue readable.',
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'ml-2',
+    title: 'BEAT SYNC',
+    desc: "Right-click Audio → 'Show Music Beats' (AI Detection).",
+    detail: "Right-click the music clip on the timeline → Show Music Beats. DaVinci AI parses the audio and drops beat markers (yellow flags) on every transient. These become your cut snap points. Enable Snapping (S key) so clip edges lock to markers.",
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'ml-3',
+    title: 'SOURCE TAPE DRUMMING',
+    desc: 'Jog Wheel in Source Tape — mark IN/OUT on action beats, hit APPEND.',
+    detail: "SHTL + Dial → enters Source Tape mode (all clips as one continuous strip). JOG + Dial → frame-accurate navigation to the action peak. Press IN at the start of the hit. Press OUT at the exit frame. Hit SMART IN / APPEND — drops the clip directly onto the next beat marker. Repeat for each impact. This is 'drumming' the edit to the track.",
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'ml-4',
+    title: 'SPEED RAMPING',
+    desc: 'Speed Ramp: 200% → 40% → 200% — align the dip to gunshot audio.',
+    detail: 'Highlight the contact clip → Right-click → Retime Controls → Speed Ramp. Keyframe 1: pre-hit at 200% (fast approach). Keyframe 2: impact frame at 40% (slow-mo). Keyframe 3: recovery at 200% (snap back to tempo). Use JOG + Dial to park the playhead on the gunshot waveform transient — align the 40% keyframe EXACTLY there for maximum impact.',
+    checked: false,
+    warn: false,
+  },
+  {
+    id: 'ml-5',
+    title: 'TRANSITION OVERLAYS',
+    desc: "Glitch or Zoom transitions on the beat. Hold TRANS + Dial to cycle styles.",
+    detail: "Hold TRANS on the Speed Editor + rotate Dial to cycle through styles: Cut → Dissolve → Glitch → Zoom Blur → Wipe. Stop on Glitch or Zoom Blur. Tap to apply at the cut point on the heat timeline. Dial in duration with TRANS DUR + Dial — 4–8 frames is the sweet spot for high-BPM action edits.",
+    checked: false,
+    warn: false,
+  },
+]
+
+// ─────────────────────────────────────────────
 // Video Progress Board Data
 // ─────────────────────────────────────────────
 const PROGRESS_SECTIONS = [
@@ -708,6 +854,13 @@ const PROGRESS_KEY       = 'ols-progress-v1'
 const SE_DRILLS_KEY      = 'ols-se-drills-v1'
 const EDIT_WORKFLOW_KEY  = 'ols-edit-workflow-v1'
 const ASSET_BUCKET_KEY   = 'ols-asset-bucket-v1'
+const SYNC_CHECKLIST_KEY = 'ols-sync-checklist-v1'
+const VOICE_ISO_KEY      = 'ols-voice-iso-v1'
+const IPAD_PERF_KEY      = 'ols-ipad-perf-v1'
+const CAM_NOTES_KEY      = 'ols-cam-notes-v1'
+const TRANSCRIBE_KEY     = 'ols-transcribe-v1'
+const DUCKER_KEY         = 'ols-ducker-v1'
+const MONTAGE_LAB_KEY    = 'ols-montage-v1'
 
 // ─────────────────────────────────────────────
 // App
@@ -737,6 +890,30 @@ export default function App() {
   const [newAssetTitle, setNewAssetTitle] = useState('')
   const [newAssetDesc, setNewAssetDesc]  = useState('')
   const [showGodMode, setShowGodMode]   = useState(false)
+
+  // ── Tab navigation ──
+  const [activeTab, setActiveTab] = useState(0) // 0=Field Prep, 1=Sync Lab, 2=Studio
+
+  // ── Section 2: Sync & Multicam checklist ──
+  const [syncChecklist, setSyncChecklist] = useLocalStorage(SYNC_CHECKLIST_KEY, DEFAULT_SYNC_CHECKLIST)
+  const [expandedSync, setExpandedSync]   = useState(null)
+
+  // ── Section 3: Audio & AI Lab ──
+  const [voiceIso, setVoiceIso]       = useLocalStorage(VOICE_ISO_KEY, { lav1: 50, lav2: 50 })
+  const [duckerEnabled, setDuckerEnabled] = useLocalStorage(DUCKER_KEY, false)
+  const [transcribeText, setTranscribeText] = useLocalStorage(TRANSCRIBE_KEY, '')
+  const [transcribeQuery, setTranscribeQuery] = useState('')
+
+  // ── Section 4: iPad Performance Protocol ──
+  const [ipadPerf, setIpadPerf]       = useLocalStorage(IPAD_PERF_KEY, DEFAULT_IPAD_PERF)
+  const [expandedIpad, setExpandedIpad] = useState(null)
+
+  // ── Camera custom notes ──
+  const [camNotes, setCamNotes] = useLocalStorage(CAM_NOTES_KEY, {})
+
+  // ── Montage Lab ──
+  const [montageItems, setMontageItems] = useLocalStorage(MONTAGE_LAB_KEY, DEFAULT_MONTAGE_LAB)
+  const [expandedMontage, setExpandedMontage] = useState(null)
 
   const { nightOps, phaseItems, collapsedPhases } = appState
   const mode = nightOps ? 'night' : 'day'
@@ -936,6 +1113,41 @@ export default function App() {
     setAssetBucket((list) => list.filter((item) => item.id !== id))
   }
 
+  // ── Sync & Multicam checklist ──
+  function toggleSyncItem(id) {
+    setSyncChecklist((list) =>
+      list.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
+    )
+  }
+  function resetSyncChecklist() {
+    setSyncChecklist((list) => list.map((item) => ({ ...item, checked: false })))
+  }
+
+  // ── iPad Performance Protocol ──
+  function toggleIpadPerf(id) {
+    setIpadPerf((list) =>
+      list.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
+    )
+  }
+  function resetIpadPerf() {
+    setIpadPerf((list) => list.map((item) => ({ ...item, checked: false })))
+  }
+
+  // ── Camera custom notes ──
+  function updateCamNote(camId, note) {
+    setCamNotes((n) => ({ ...n, [camId]: note }))
+  }
+
+  // ── Montage Lab ──
+  function toggleMontageItem(id) {
+    setMontageItems((list) =>
+      list.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
+    )
+  }
+  function resetMontage() {
+    setMontageItems((list) => list.map((item) => ({ ...item, checked: false })))
+  }
+
   // ── Progress calc ──
   const allItems = DEFAULT_PHASES.flatMap((p) => phaseItems[p.id]?.[mode] ?? [])
   const total = allItems.length
@@ -947,6 +1159,14 @@ export default function App() {
 
   const seDrillDone = seDrills.filter((i) => i.checked).length
   const wfDone      = editWorkflow.filter((i) => i.checked).length
+  const syncDone    = syncChecklist.filter((i) => i.checked).length
+  const ipadDone    = ipadPerf.filter((i) => i.checked).length
+  const montageDone = montageItems.filter((i) => i.checked).length
+
+  const transcribeLines = transcribeText.split('\n').filter(Boolean)
+  const transcribeMatches = transcribeQuery.trim()
+    ? transcribeLines.filter((l) => l.toLowerCase().includes(transcribeQuery.toLowerCase()))
+    : []
 
   return (
     <div className={`app${nightOps ? ' night-ops' : ''}`}>
@@ -977,7 +1197,8 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── Video Progress Board ── */}
+      {/* ── Video Progress Board + Camera Ledger (Tab 0 only) ── */}
+      {activeTab === 0 && <>
       <section className="app-section progress-board-section">
         <div className="section-title-row">
           <h2 className="section-title">Video Progress</h2>
@@ -1041,8 +1262,138 @@ export default function App() {
           </table>
         </div>
       </section>
+      {/* End Camera Ledger — end Tab 0 top sections */}
+      </>}
 
-      {/* ── Edit mode bar ── */}
+      {/* ── Tab 1: Sync Lab — top sections ── */}
+      {activeTab === 1 && <>
+        {/* Section 1: Metadata Prep Grid */}
+        <section className="app-section">
+          <div className="section-title-row">
+            <h2 className="section-title">Metadata Prep</h2>
+            <span className="section-hint">Camera Assignment · Sync Bin</span>
+          </div>
+          <div className="meta-grid">
+            {METADATA_PREP.map(({ cam, name, role, res, ar, badge }) => (
+              <div key={cam} className="meta-row">
+                <span className="meta-cam">CAM {cam}</span>
+                <div className="meta-body">
+                  <span className="meta-name">{name}</span>
+                  <span className="meta-role">{role}</span>
+                </div>
+                <div className="meta-specs">
+                  <span className="meta-res">{res}</span>
+                  <span className="meta-ar">{ar}</span>
+                </div>
+                {badge === 'anchor' && <span className="meta-badge meta-anchor">⚓ Anchor</span>}
+                {badge === 'toggle' && <span className="meta-badge meta-toggle">↔ Full Screen</span>}
+                {badge === 'warn'   && <span className="meta-badge meta-warn">⚠ SuperScale 2x</span>}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 2: Sync & Multicam Workflow Checklist */}
+        <section className="phase-card">
+          <div className="shot-list-header">
+            <div className="phase-header-left">
+              <p className="phase-kicker">Editing SOP</p>
+              <h2 className="phase-name">Sync &amp; Multicam Workflow</h2>
+              <p className="phase-sub">5 logic gates — complete in order</p>
+            </div>
+            <div className="phase-header-right">
+              <span className={`phase-badge${syncDone === syncChecklist.length ? ' complete' : ''}`}>
+                {syncDone}/{syncChecklist.length}
+              </span>
+            </div>
+          </div>
+          <ul className="checklist">
+            {syncChecklist.map((item) => (
+              <li
+                key={item.id}
+                className={['cl-item', item.checked ? 'is-checked' : ''].filter(Boolean).join(' ')}
+              >
+                <div className="sync-row">
+                  <label className="cl-label" style={{ flex: 1 }}>
+                    <input type="checkbox" checked={item.checked} onChange={() => toggleSyncItem(item.id)} />
+                    <span className="cl-checkmark" aria-hidden="true" />
+                    <div>
+                      <span className="sync-title">{item.title}</span>
+                      <span className="sync-desc">{item.desc}</span>
+                    </div>
+                  </label>
+                  <button
+                    className="sync-expand-btn"
+                    onClick={() => setExpandedSync(expandedSync === item.id ? null : item.id)}
+                    aria-label="Expand details"
+                  >
+                    {expandedSync === item.id ? '▲' : '▼'}
+                  </button>
+                </div>
+                {expandedSync === item.id && (
+                  <p className="sync-detail">{item.detail}</p>
+                )}
+              </li>
+            ))}
+          </ul>
+          <div className="card-footer-row">
+            <button className="reset-btn" onClick={resetSyncChecklist}>Reset Sync Checks</button>
+          </div>
+        </section>
+      </>}
+
+      {/* ── Tab 2: Studio — top section ── */}
+      {activeTab === 2 && <>
+        {/* Section 4: iPad Performance Protocol */}
+        <section className="phase-card">
+          <div className="shot-list-header">
+            <div className="phase-header-left">
+              <p className="phase-kicker">System</p>
+              <h2 className="phase-name">iPad Performance Protocol</h2>
+              <p className="phase-sub">M4 optimisation — prevent thermal throttle</p>
+            </div>
+            <div className="phase-header-right">
+              <span className={`phase-badge${ipadDone === ipadPerf.length ? ' complete' : ''}`}>
+                {ipadDone}/{ipadPerf.length}
+              </span>
+            </div>
+          </div>
+          <ul className="checklist">
+            {ipadPerf.map((item) => (
+              <li
+                key={item.id}
+                className={['cl-item', item.checked ? 'is-checked' : ''].filter(Boolean).join(' ')}
+              >
+                <div className="sync-row">
+                  <label className="cl-label" style={{ flex: 1 }}>
+                    <input type="checkbox" checked={item.checked} onChange={() => toggleIpadPerf(item.id)} />
+                    <span className="cl-checkmark" aria-hidden="true" />
+                    <div>
+                      <span className={`sync-title${item.warn ? ' warn-text' : ''}`}>{item.title}</span>
+                      <span className="sync-desc">{item.desc}</span>
+                    </div>
+                  </label>
+                  <button
+                    className="sync-expand-btn"
+                    onClick={() => setExpandedIpad(expandedIpad === item.id ? null : item.id)}
+                    aria-label="Expand details"
+                  >
+                    {expandedIpad === item.id ? '▲' : '▼'}
+                  </button>
+                </div>
+                {expandedIpad === item.id && (
+                  <p className={`sync-detail${item.warn ? ' warn-detail' : ''}`}>{item.detail}</p>
+                )}
+              </li>
+            ))}
+          </ul>
+          <div className="card-footer-row">
+            <button className="reset-btn" onClick={resetIpadPerf}>Reset Protocol</button>
+          </div>
+        </section>
+      </>}
+
+      {/* ── Edit mode bar (all tabs — phases below are filtered) ── */}
       <div className="edit-bar">
         <span className="edit-bar-label">SOP Checklist</span>
         <button
@@ -1053,8 +1404,8 @@ export default function App() {
         </button>
       </div>
 
-      {/* ── Phase Cards ── */}
-      {DEFAULT_PHASES.map((phase, phaseIdx) => {
+      {/* ── Phase Cards (filtered to active tab) ── */}
+      {DEFAULT_PHASES.filter((p) => PHASE_TAB[p.id] === activeTab).map((phase, phaseIdx) => {
         const items = phaseItems[phase.id]?.[mode] ?? []
         const phaseChecked = items.filter((i) => i.checked).length
         const isCollapsed = collapsedPhases?.[phase.id] ?? true
@@ -1133,7 +1484,8 @@ export default function App() {
         )
       })}
 
-      {/* ── Shot List ── */}
+      {/* ── Shot List (Tab 0 only) ── */}
+      {activeTab === 0 && (
       <section className="phase-card shot-list-card">
         <div className="phase-header shot-list-header">
           <div className="phase-header-left">
@@ -1202,6 +1554,155 @@ export default function App() {
         </ul>
         <div className="card-footer-row">
           <button className="reset-btn" onClick={resetShots}>Reset Shot List</button>
+        </div>
+      </section>
+      )}{/* End Tab 0 Shot List */}
+
+      {/* ── Section 3: Audio & AI Lab (Tab 1 only) ── */}
+      {activeTab === 1 && (
+      <section className="app-section">
+        <div className="section-title-row">
+          <h2 className="section-title">Audio &amp; AI Lab</h2>
+          <span className="section-hint">Fairlight settings</span>
+        </div>
+
+        {/* Voice ISO */}
+        <div className="audio-block">
+          <p className="audio-block-title">VOICE ISO — Rode Tracks</p>
+          {[['lav1', 'LAV 1 (Shaun)'], ['lav2', 'LAV 2 (Callie)']].map(([key, label]) => (
+            <div key={key} className="voice-iso-row">
+              <span className="voice-iso-label">{label}</span>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={5}
+                value={voiceIso[key]}
+                onChange={(e) => setVoiceIso((v) => ({ ...v, [key]: Number(e.target.value) }))}
+                className="voice-iso-slider"
+                aria-label={`${label} isolation`}
+              />
+              <span className="voice-iso-value">{voiceIso[key]}%</span>
+            </div>
+          ))}
+          <p className="audio-hint">Target: 40–60% · Higher = more isolation, less natural tone</p>
+        </div>
+
+        {/* Auto-Ducker */}
+        <div className="audio-block">
+          <div className="audio-block-header">
+            <p className="audio-block-title">AUTO-DUCKER — Music (A3)</p>
+            <button
+              className={`ducker-toggle${duckerEnabled ? ' on' : ''}`}
+              onClick={() => setDuckerEnabled((v) => !v)}
+            >
+              {duckerEnabled ? 'ON' : 'OFF'}
+            </button>
+          </div>
+          <div className="ducker-spec-grid">
+            <div className="ducker-spec"><span>Target Level</span><strong>−18 dB</strong></div>
+            <div className="ducker-spec"><span>Reference</span><strong>A1 / A2 Dialogue</strong></div>
+            <div className="ducker-spec"><span>Lookahead</span><strong>100 ms</strong></div>
+            <div className="ducker-spec"><span>Rise / Fall</span><strong>500 ms</strong></div>
+          </div>
+        </div>
+
+        {/* AI Transcribe */}
+        <div className="audio-block">
+          <p className="audio-block-title">AI TRANSCRIBE — Keyword Search</p>
+          <div className="keyword-chips">
+            {TRANSCRIPT_KEYWORDS.map((kw) => (
+              <button
+                key={kw}
+                className={`chip${transcribeQuery === kw ? ' active' : ''}`}
+                onClick={() => setTranscribeQuery(transcribeQuery === kw ? '' : kw)}
+              >
+                {kw}
+              </button>
+            ))}
+          </div>
+          <input
+            className="cl-input transcribe-search"
+            placeholder="Search keywords…"
+            value={transcribeQuery}
+            onChange={(e) => setTranscribeQuery(e.target.value)}
+            aria-label="Search transcript"
+          />
+          <textarea
+            className="transcribe-area"
+            placeholder="Paste AI-generated transcript here…"
+            value={transcribeText}
+            onChange={(e) => setTranscribeText(e.target.value)}
+            rows={5}
+            aria-label="Transcript text"
+          />
+          {transcribeQuery.trim() && (
+            <div className="transcribe-results" aria-live="polite">
+              {transcribeMatches.length === 0 ? (
+                <p className="transcribe-no-result">No matches for &ldquo;{transcribeQuery}&rdquo;</p>
+              ) : (
+                transcribeMatches.map((line, i) => (
+                  <p key={i} className="transcribe-result-line">{line}</p>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+      )}{/* End Tab 1 Audio Lab */}
+
+      {/* ── Tab 2: Studio — Speed Editor, Editing Lab, Footer ── */}
+      {activeTab === 2 && <>
+
+      {/* ── Montage Lab: Intro & Highlights ── */}
+      <section className="phase-card montage-lab-card">
+        <div className="shot-list-header montage-lab-header">
+          <div className="phase-header-left">
+            <p className="phase-kicker montage-kicker">Montage Lab</p>
+            <h2 className="phase-name">Intro &amp; Highlights</h2>
+            <p className="phase-sub">Beat-sync pipeline — 5 steps in order</p>
+          </div>
+          <div className="phase-header-right">
+            <span className={`phase-badge${montageDone === montageItems.length ? ' complete' : ''}`}>
+              {montageDone}/{montageItems.length}
+            </span>
+          </div>
+        </div>
+        <ul className="checklist">
+          {montageItems.map((item) => (
+            <li
+              key={item.id}
+              className={['cl-item', item.checked ? 'is-checked' : ''].filter(Boolean).join(' ')}
+            >
+              <div className="sync-row">
+                <label className="cl-label" style={{ flex: 1 }}>
+                  <input
+                    type="checkbox"
+                    checked={item.checked}
+                    onChange={() => toggleMontageItem(item.id)}
+                  />
+                  <span className="cl-checkmark" aria-hidden="true" />
+                  <div>
+                    <span className="sync-title montage-title">{item.title}</span>
+                    <span className="sync-desc">{item.desc}</span>
+                  </div>
+                </label>
+                <button
+                  className="sync-expand-btn"
+                  onClick={() => setExpandedMontage(expandedMontage === item.id ? null : item.id)}
+                  aria-label="Expand step detail"
+                >
+                  {expandedMontage === item.id ? '▲' : '▼'}
+                </button>
+              </div>
+              {expandedMontage === item.id && (
+                <p className="sync-detail montage-detail">{item.detail}</p>
+              )}
+            </li>
+          ))}
+        </ul>
+        <div className="card-footer-row">
+          <button className="reset-btn" onClick={resetMontage}>Reset Montage Checks</button>
         </div>
       </section>
 
@@ -1440,6 +1941,27 @@ export default function App() {
         </button>
       </footer>
 
+      </>}{/* End Tab 2 Studio */}
+
+      {/* ── Bottom Tab Navigation ── */}
+      <nav className="tab-nav" role="tablist">
+        {[
+          { label: 'FIELD PREP', id: 0 },
+          { label: 'SYNC LAB',   id: 1 },
+          { label: 'STUDIO',     id: 2 },
+        ].map(({ label, id }) => (
+          <button
+            key={id}
+            className={`tab-btn${activeTab === id ? ' active' : ''}`}
+            onClick={() => setActiveTab(id)}
+            role="tab"
+            aria-selected={activeTab === id}
+          >
+            <span className="tab-label">{label}</span>
+          </button>
+        ))}
+      </nav>
+
       {/* ── Camera Popover ── */}
       {activeCamera && (
         <div
@@ -1504,6 +2026,17 @@ export default function App() {
                 ))}
               </div>
               <p className="popover-notes">{activeCamera.notes}</p>
+              <div className="shared-settings-block">
+                <p className="shared-settings-title">Your Field Notes</p>
+                <textarea
+                  className="cam-note-area"
+                  placeholder="Add notes for this camera…"
+                  value={camNotes[activeCamera.id] || ''}
+                  onChange={(e) => updateCamNote(activeCamera.id, e.target.value)}
+                  rows={3}
+                  aria-label={`Notes for ${activeCamera.name}`}
+                />
+              </div>
             </div>
           </div>
         </div>
