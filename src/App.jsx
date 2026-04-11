@@ -647,6 +647,32 @@ const SE_DRILLS_DEFAULT = [
 ]
 
 // ─────────────────────────────────────────────
+// Editing Lab Data
+// ─────────────────────────────────────────────
+const DEFAULT_EDIT_WORKFLOW = [
+  { id: 'ew-1', text: 'INTAKE & STORAGE: Move cards to SSD (APFS Format). Organize into folders: ME_FACE, ME_SCOPE, CALLIE, SQUAD_LEAD.', checked: false },
+  { id: 'ew-2', text: 'PROXY GENERATION: Create ProRes 422 LT (1080p) Proxies. Crucial for iPad RAM management.', checked: false },
+  { id: 'ew-3', text: "THE CUT PAGE ROUGH-IN: Use Speed Editor 'Source Tape'. Trim 40-minute hikes down to 5-minute action loops.", checked: false },
+  { id: 'ew-4', text: "SMART SYNC: Create 'Sync Bin' using Waveform. Align GP10, GP8, and GP4.", checked: false },
+  { id: 'ew-5', text: "AI PROCESSING: Apply 'Voice Isolation' (50%) to Rodes. Apply 'SuperScale 2x' to GP4/Sionyx.", checked: false },
+  { id: 'ew-6', text: 'RENDER IN PLACE: Right-click AI-heavy clips → Render in Place (ProRes 422). Prevents lag during playback.', checked: false },
+  { id: 'ew-7', text: "ASSET LAYER: Drop 'Hybrid Phonk' music (-18dB) and Hit-Marker SFX.", checked: false },
+]
+
+const DEFAULT_ASSET_BUCKET = [
+  { id: 'ab-1', title: 'MUSIC VIBE',  desc: 'Hybrid Phonk / Industrial Cyberpunk (Fast cuts)' },
+  { id: 'ab-2', title: 'AUDIO SFX',   desc: 'Mechanical bolt cycles, Radio squelch, Bullet cracks' },
+  { id: 'ab-3', title: 'HIT MARKERS', desc: "4-frame visual overlay + 'Tick' sound effect" },
+  { id: 'ab-4', title: 'J-CUTS',      desc: 'Start audio of the next clip 1 second early for flow' },
+]
+
+const SE_GODMODE = [
+  { key: 'SOURCE TAPE',      desc: 'Scroll through all footage in one continuous strip.' },
+  { key: 'SOURCE OVERWRITE', desc: 'Instantly place Scope-cam over Head-cam in sync.' },
+  { key: 'RIPPLE DELETE',    desc: 'Remove dead air with one tap.' },
+]
+
+// ─────────────────────────────────────────────
 // Video Progress Board Data
 // ─────────────────────────────────────────────
 const PROGRESS_SECTIONS = [
@@ -676,10 +702,12 @@ function buildDefaultState() {
   return { nightOps: false, phaseItems, collapsedPhases }
 }
 
-const STORAGE_KEY   = 'ols-sop-v3'
-const SHOTLIST_KEY  = 'ols-shotlist-v1'
-const PROGRESS_KEY  = 'ols-progress-v1'
-const SE_DRILLS_KEY = 'ols-se-drills-v1'
+const STORAGE_KEY        = 'ols-sop-v3'
+const SHOTLIST_KEY       = 'ols-shotlist-v1'
+const PROGRESS_KEY       = 'ols-progress-v1'
+const SE_DRILLS_KEY      = 'ols-se-drills-v1'
+const EDIT_WORKFLOW_KEY  = 'ols-edit-workflow-v1'
+const ASSET_BUCKET_KEY   = 'ols-asset-bucket-v1'
 
 // ─────────────────────────────────────────────
 // App
@@ -699,7 +727,16 @@ export default function App() {
   const [shotEditMode, setShotEditMode] = useState(false)
   const [shotEditingId, setShotEditingId] = useState(null)
   const [shotEditingText, setShotEditingText] = useState('')
-  const [showSeRef, setShowSeRef] = useState(false)
+  const [showSeRef, setShowSeRef]   = useState(false)
+  const [editWorkflow, setEditWorkflow] = useLocalStorage(EDIT_WORKFLOW_KEY, DEFAULT_EDIT_WORKFLOW)
+  const [assetBucket, setAssetBucket]   = useLocalStorage(ASSET_BUCKET_KEY, DEFAULT_ASSET_BUCKET)
+  const [wfEditMode, setWfEditMode]     = useState(false)
+  const [wfEditingId, setWfEditingId]   = useState(null)
+  const [wfEditingText, setWfEditingText] = useState('')
+  const [newStepText, setNewStepText]   = useState('')
+  const [newAssetTitle, setNewAssetTitle] = useState('')
+  const [newAssetDesc, setNewAssetDesc]  = useState('')
+  const [showGodMode, setShowGodMode]   = useState(false)
 
   const { nightOps, phaseItems, collapsedPhases } = appState
   const mode = nightOps ? 'night' : 'day'
@@ -839,6 +876,66 @@ export default function App() {
     ))
   }
 
+  // ── Editing Lab: workflow ──
+  function toggleWorkflowStep(id) {
+    setEditWorkflow((list) => list.map((item) =>
+      item.id === id ? { ...item, checked: !item.checked } : item
+    ))
+  }
+
+  function moveWorkflowStep(index, dir) {
+    setEditWorkflow((list) => {
+      const next = [...list]
+      const target = index + dir
+      if (target < 0 || target >= next.length) return list
+      ;[next[index], next[target]] = [next[target], next[index]]
+      return next
+    })
+  }
+
+  function startWfEdit(item) {
+    setWfEditingId(item.id)
+    setWfEditingText(item.text)
+  }
+
+  function commitWfEdit() {
+    if (!wfEditingId) return
+    const trimmed = wfEditingText.trim()
+    setEditWorkflow((list) => list.map((item) =>
+      item.id === wfEditingId ? { ...item, text: trimmed || item.text } : item
+    ))
+    setWfEditingId(null)
+    setWfEditingText('')
+  }
+
+  function addWorkflowStep() {
+    const trimmed = newStepText.trim()
+    if (!trimmed) return
+    setEditWorkflow((list) => [...list, { id: `ew-${Date.now()}`, text: trimmed, checked: false }])
+    setNewStepText('')
+  }
+
+  function deleteWorkflowStep(id) {
+    setEditWorkflow((list) => list.filter((item) => item.id !== id))
+  }
+
+  function resetWorkflow() {
+    setEditWorkflow((list) => list.map((item) => ({ ...item, checked: false })))
+  }
+
+  // ── Editing Lab: asset bucket ──
+  function addAsset() {
+    const title = newAssetTitle.trim()
+    if (!title) return
+    setAssetBucket((list) => [...list, { id: `ab-${Date.now()}`, title, desc: newAssetDesc.trim() }])
+    setNewAssetTitle('')
+    setNewAssetDesc('')
+  }
+
+  function deleteAsset(id) {
+    setAssetBucket((list) => list.filter((item) => item.id !== id))
+  }
+
   // ── Progress calc ──
   const allItems = DEFAULT_PHASES.flatMap((p) => phaseItems[p.id]?.[mode] ?? [])
   const total = allItems.length
@@ -849,6 +946,7 @@ export default function App() {
   const shotDone  = shotList.filter((i) => !i.divider && i.checked).length
 
   const seDrillDone = seDrills.filter((i) => i.checked).length
+  const wfDone      = editWorkflow.filter((i) => i.checked).length
 
   return (
     <div className={`app${nightOps ? ' night-ops' : ''}`}>
@@ -1195,6 +1293,143 @@ export default function App() {
         )}
       </section>
 
+      {/* ── Editing Lab separator ── */}
+      <div className="lab-separator" aria-hidden="true">
+        <span className="lab-separator-label">Editing Lab</span>
+      </div>
+
+      {/* ── Editing Lab: Speed-First Workflow ── */}
+      <section className="phase-card editing-lab-card">
+        <div className="phase-header shot-list-header">
+          <div className="phase-header-left">
+            <p className="phase-kicker">Editing Lab</p>
+            <h2 className="phase-name">Speed-First Workflow</h2>
+            <p className="phase-sub">7-step pipeline — reorder to match your session</p>
+          </div>
+          <div className="phase-header-right">
+            <span className={`phase-badge${wfDone === editWorkflow.length ? ' complete' : ''}`}>
+              {wfDone}/{editWorkflow.length}
+            </span>
+            <button
+              className={`edit-toggle${wfEditMode ? ' active' : ''}`}
+              onClick={() => { setWfEditMode((e) => !e); setWfEditingId(null) }}
+              style={{ marginLeft: '0.5rem' }}
+            >
+              {wfEditMode ? '✓ Done' : '✏'}
+            </button>
+          </div>
+        </div>
+        <ul className="checklist">
+          {editWorkflow.map((item, idx) => (
+            <li
+              key={item.id}
+              className={['cl-item', item.checked ? 'is-checked' : '', wfEditMode ? 'is-editing' : ''].filter(Boolean).join(' ')}
+            >
+              {wfEditMode ? (
+                <div className="cl-edit-row">
+                  <div className="reorder-btns">
+                    <button className="reorder-btn" disabled={idx === 0} onClick={() => moveWorkflowStep(idx, -1)} aria-label="Move up">▲</button>
+                    <button className="reorder-btn" disabled={idx === editWorkflow.length - 1} onClick={() => moveWorkflowStep(idx, 1)} aria-label="Move down">▼</button>
+                  </div>
+                  {wfEditingId === item.id ? (
+                    <input
+                      className="cl-input"
+                      value={wfEditingText}
+                      onChange={(e) => setWfEditingText(e.target.value)}
+                      onBlur={commitWfEdit}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') commitWfEdit()
+                        if (e.key === 'Escape') { setWfEditingId(null); setWfEditingText('') }
+                      }}
+                      autoFocus
+                    />
+                  ) : (
+                    <span className="cl-text" onClick={() => startWfEdit(item)}>{item.text}</span>
+                  )}
+                  <button className="pencil-btn" onClick={() => startWfEdit(item)} aria-label="Edit">✏</button>
+                  <button className="delete-btn" onClick={() => deleteWorkflowStep(item.id)} aria-label="Delete">✕</button>
+                </div>
+              ) : (
+                <label className="cl-label">
+                  <input type="checkbox" checked={item.checked} onChange={() => toggleWorkflowStep(item.id)} />
+                  <span className="cl-checkmark" aria-hidden="true" />
+                  <span className="cl-text">{item.text}</span>
+                </label>
+              )}
+            </li>
+          ))}
+        </ul>
+        <div className="add-item-row">
+          <input
+            className="cl-input"
+            placeholder="Add a new workflow step…"
+            value={newStepText}
+            onChange={(e) => setNewStepText(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') addWorkflowStep() }}
+          />
+          <button className="add-item-btn" onClick={addWorkflowStep} aria-label="Add step">+</button>
+        </div>
+        <div className="card-footer-row">
+          <button className="reset-btn" onClick={resetWorkflow}>Reset Workflow Checks</button>
+        </div>
+      </section>
+
+      {/* ── Editing Lab: Asset Bucket ── */}
+      <section className="phase-card editing-lab-card">
+        <div className="phase-header shot-list-header">
+          <div className="phase-header-left">
+            <p className="phase-kicker">Editing Lab</p>
+            <h2 className="phase-name">Asset Bucket</h2>
+            <p className="phase-sub">Quick-view reference cards — essential edit assets</p>
+          </div>
+        </div>
+        <div className="asset-bucket-grid">
+          {assetBucket.map((card) => (
+            <div key={card.id} className="asset-card">
+              <button
+                className="asset-card-delete"
+                onClick={() => deleteAsset(card.id)}
+                aria-label={`Remove ${card.title}`}
+              >✕</button>
+              <span className="asset-card-title">{card.title}</span>
+              <p className="asset-card-desc">{card.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="add-item-row add-asset-row">
+          <input
+            className="cl-input"
+            placeholder="Asset name…"
+            value={newAssetTitle}
+            onChange={(e) => setNewAssetTitle(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') addAsset() }}
+          />
+          <input
+            className="cl-input"
+            placeholder="Description…"
+            value={newAssetDesc}
+            onChange={(e) => setNewAssetDesc(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') addAsset() }}
+          />
+          <button className="add-item-btn" onClick={addAsset} aria-label="Add asset">+</button>
+        </div>
+      </section>
+
+      {/* ── Editing Lab: Speed Editor Cheat Sheet (God-Mode trigger) ── */}
+      <section className="app-section editing-lab-card">
+        <button
+          className="se-ref-toggle"
+          onClick={() => setShowGodMode(true)}
+          aria-label="Open Speed Editor God-Mode cheat sheet"
+        >
+          <div>
+            <p className="section-title" style={{ marginBottom: '0.2rem' }}>Speed Editor Cheat Sheet</p>
+            <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', margin: 0 }}>3 God-Mode buttons — tap to open quick-access overlay</p>
+          </div>
+          <span className="god-mode-badge">God Mode</span>
+        </button>
+      </section>
+
       {/* ── Footer ── */}
       <footer className="app-footer">
         <p className="footer-note">
@@ -1269,6 +1504,37 @@ export default function App() {
                 ))}
               </div>
               <p className="popover-notes">{activeCamera.notes}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── God-Mode Modal ── */}
+      {showGodMode && (
+        <div
+          className="popover-overlay"
+          onClick={() => setShowGodMode(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Speed Editor God-Mode Cheat Sheet"
+        >
+          <div className="popover-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="popover-header">
+              <div>
+                <h3 className="popover-name">God-Mode Buttons</h3>
+                <p className="popover-role">Speed Editor — 3 Essential Controls</p>
+              </div>
+              <button className="popover-close" onClick={() => setShowGodMode(false)} aria-label="Close">✕</button>
+            </div>
+            <div className="popover-body">
+              <div className="godmode-grid">
+                {SE_GODMODE.map(({ key, desc }) => (
+                  <div key={key} className="godmode-card">
+                    <span className="godmode-key">{key}</span>
+                    <p className="godmode-desc">{desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
